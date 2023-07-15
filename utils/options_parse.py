@@ -6,10 +6,10 @@ def train_options():
 
     #This is for determinining if we are going to have multiple runs, with a constant stepsize for C from [0,1] or 
     #if are only going to have a single run
-    me_group = parser.add_mutually_exclusive_group() 
+    me_group = parser.add_mutually_exclusive_group(required=True) 
 
     parser.add_argument("--dataset",
-                         choices=["MNIST, Fashion-MNIST, CIFAR-10, CIFAR-100"],
+                         choices=["MNIST", "Fashion-MNIST", "CIFAR-10", "CIFAR-100"],
                          required=True,
                          help = "The dataset on which you would like to train (MNIST, Fashion-MNIST, CIFAR-10, CIFAR-100)")
     
@@ -81,7 +81,12 @@ def train_options():
     
     parser.add_argument('--save-models',
                         action="store_true",
-                        help="Store the trained central models, models are stores in the trained models directory")
+                        help="Store the trained central models, models are stores in the trained models directory (Directory will be created if \
+                            doesn't exist)")
     
     args = parser.parse_args()
     return args
+
+
+if __name__ == "__main__":
+    args = train_options()
