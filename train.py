@@ -6,6 +6,7 @@
 # 5. Create the training loop for the local models
 # 6. Implement MeanSquaredLoss to test when to stop the training of the local epochs
 # 7. Create a model info function
+# 8. Create asserts to ensure that each client gets atleast 1 example (Don't let the program run otherwise)
 
 from utils.options_parser import train_options
 import torch
