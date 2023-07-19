@@ -58,7 +58,7 @@ def train_options():
     
     parser.add_argument('--schedule',
                         action="store_true",
-                        help="Keep the learning rate static or use a Cosine Schedule while training at client")
+                        help="Keep the learning rate static or use a Scheduler (static, cyclical)")
     
     parser.add_argument('--optim',
                         choices=["Adam",'SGD','AdamW'],
