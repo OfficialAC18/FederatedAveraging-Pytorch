@@ -46,7 +46,7 @@ def train_options():
     parser.add_argument('--verbose',
                         action='store_true')
     
-    parser.add_argument('-examples-dist',
+    parser.add_argument('-examples_dist',
                         choices=['equal', 'unequal'],
                         default='equal',
                         help="If the data is to be divided equally amongst the different clients (Default set to equal)")
@@ -56,10 +56,11 @@ def train_options():
                         default=0.01,
                         help="The learning rate that will be used for the models (Default is 0.01)")
     
-    parser.add_argument('--schedule',
-                        action="store_true",
-                        help="Keep the learning rate static or use a Scheduler (static, cyclical)")
-    
+    parser.add_argument('--sched',
+                        choices=["static","cyclic","1cycle","cosine","step"],
+                        default = "1cycle",
+                        help="Keep the learning rate static or use a Scheduler (static, cyclic, 1cycle, cosine, step)"
+                        )
     parser.add_argument('--optim',
                         choices=["Adam",'SGD','AdamW'],
                         default="Adam",
@@ -84,6 +85,15 @@ def train_options():
                         help="Store the trained central models, models are stores in the trained models directory (Directory will be created if \
                             doesn't exist)")
     
+    parser.add_argument('--client_epochs',
+                        type = int,
+                        default=100,
+                        help="Used along with AbsLossDiff, will be used as the upper bound of epochs on client side")
+    
+    parser.add_argument('--num_workers',
+                        type=int,
+                        default=4,
+                        help="The number of threads to collate the dataloader")
     args = parser.parse_args()
     return args
 

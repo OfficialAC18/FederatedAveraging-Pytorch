@@ -5,7 +5,13 @@ class AbsLossDiff:
         self.last_loss = torch.tensor(math.inf, device = args.device)
         self.loss_diff = torch.tensor(math.inf, device = args.device)
 
-    def calc_error(self,loss):
+    def log_loss(self,loss):
+        """
+        Keeps track of the average loss per epoch
+        """
+
+
+    def calc_error_diff(self,loss):
         self.loss_diff = torch.abs(
             self.last_loss - loss
         )

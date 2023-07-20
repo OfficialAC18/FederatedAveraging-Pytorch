@@ -1,12 +1,12 @@
 #### TO-DO LIST #### 
-# 1. Implement Multiple Optimizers, with Schedulers and such (e.g. Cosine Scheduler for SGD)
+# 1. Implement Multiple Optimizers, with Schedulers and such (e.g. Cosine Scheduler for SGD) (Done)
 # 2. Implement a general Dataset class to inherit from (Done)
 # 2a. Implement IID sampling (Done)
 # 2b. Implement Non-IID Sampling (Done)
 # 3. Implement the class for each Dataset (Done)
 # 4. Create Both Models (Done)
 # 5. Create the training loop for the local models (Done)
-# 6. Implement AbsLossDiff to test when to stop the training of the local epochs(Done)
+# 6. Implement AbsLossDiff to test when to stop the training of the local epochs(Need to modify, takes average over batches)
 # 7. Create a model info function (Done)
 # 8. Create asserts to ensure that each client gets atleast 2 examples (Don't let the program run otherwise) (Done)
 # 9. Implement unequal sampling
