@@ -1,6 +1,6 @@
 import math
 import torch
-class RootSquaredLossDiff:
+class AbsLossDiff:
     def __init__(self,args) -> None:
         self.last_loss = torch.tensor(math.inf, device = args.device)
         self.loss_diff = torch.tensor(math.inf, device = args.device)
@@ -10,4 +10,3 @@ class RootSquaredLossDiff:
             self.last_loss - loss
         )
         self.last_loss = loss
-        
