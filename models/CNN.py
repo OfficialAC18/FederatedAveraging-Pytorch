@@ -10,15 +10,17 @@ class CNN(nn.Module):
             self.conv2 = nn.Conv1d(in_channels=32, out_channels=64,
                                    kernel_size=5, stride=1)
             self.maxpool = nn.MaxPool1d(kernel_size=2)
-            self.dropout = nn.Dropout()
-            self.flatten = nn.Flatten()
         else:
             self.conv1 = nn.Conv2d(in_channels=3, out_channels=32,
                                    kernel_size=5, stride=1)
             self.conv2 = nn.Conv2d(in_channels=32, out_channels=64,
                                    kernel_size=5, stride=1)
             self.maxpool = nn.MaxPool2d(kernel_size=2)
-            
+
+        #The stateless layers are common for both    
+        self.dropout = nn.Dropout()
+        self.flatten = nn.Flatten()
+        
         self.linear = nn.LazyLinear(out_features=512)
 
         if args.dataset in ["MNIST","Fashion-MNIST","CIFAR-10"]:
@@ -35,8 +37,8 @@ class CNN(nn.Module):
         x = self.dropout(x)
         x = self.maxpool(x)
         x = self.flatten(x)
-        x = F.relu(self.linear1(x))
-        x = F.softmax(self.head(x))
+        x = F.relu(self.linear(x))
+        x = F.softmax(self.head(x),dim=-1)
 
         return x
     

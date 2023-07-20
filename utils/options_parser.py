@@ -74,12 +74,12 @@ def train_options():
                         default=1,
                         help="Set the seed for the run")
     
-    parser.add_argument('--epoch',
+    parser.add_argument('--epochs',
                         type=int,
                         default=100,
                         help="Total number of epochs to run at server end")
     
-    parser.add_argument('--save-models',
+    parser.add_argument('--save_models',
                         action="store_true",
                         help="Store the trained central models, models are stores in the trained models directory (Directory will be created if \
                             doesn't exist)")

@@ -11,10 +11,10 @@ class MLP(nn.Module):
         if args.dataset in ["MNIST","Fashion-MNIST","CIFAR-10"]:
             self.head = nn.Linear(in_features=200, out_features=10)
         else:
-            self.head = nn.Linear(in_features=200, out_features=10)
+            self.head = nn.Linear(in_features=200, out_features=100)
     
     def forward(self,x):
         x = self.flatten(x)
         x = F.relu(F.dropout(self.linear1(x)))
         x = self.linear2(x)
-        x = F.softmax(self.head(x))
+        x = F.softmax(self.head(x),dim=-1)

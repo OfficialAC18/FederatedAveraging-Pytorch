@@ -6,8 +6,8 @@
 # 3. Implement the class for each Dataset (Done)
 # 4. Create Both Models (Done)
 # 5. Create the training loop for the local models (Done)
-# 6. Implement MeanSquaredLoss to test when to stop the training of the local epochs
-# 7. Create a model info function
+# 6. Implement AbsLossDiff to test when to stop the training of the local epochs(Done)
+# 7. Create a model info function (Done)
 # 8. Create asserts to ensure that each client gets atleast 2 examples (Don't let the program run otherwise) (Done)
 # 9. Implement unequal sampling
 
@@ -19,6 +19,7 @@ from utils.model_creator import create_model
 from data.dataset import create_client_dataset
 from utils.model_update import model_update
 from utils.run_average import create_avg_state_dict, update_state_dict
+from utils.model_info import model_info
 
 #Setting the config for the logger
 logging.basicConfig(format='%(levelname)s-%(asctime)s-%(message)s')
@@ -33,13 +34,14 @@ if args.gpu == True:
     else:
         logging.info("GPU not available, Switching to CPU")
         device = torch.device('cpu')
+        args.gpu = False
 
 else:
     device = torch.device('cpu')
 
 #Create the global_model based on args and load it
 #on relevant hardware
-global_model = create_model(args)
+global_model = create_model(args,server=True)
 global_model.to(device)
 
 #State-dict of the global model
@@ -53,8 +55,13 @@ client_data = {}
 
 #Calculating the number of clients per round
 args.num_clients_round = round(args.fraction * args.num_clients)
+
 #Checking if the number of clients is valid
-assert args.num_clients_rounds <= args.num_clients, f"The fraction of clients is higher than the total number of clients. Please rectify."
+assert args.num_clients_round <= args.num_clients, f"The fraction of clients is higher than the total number of clients. Please rectify."
+
+
+#Print out run info
+model_info(args)
 
 #Implementing FedAveraging
 for _ in range(args.epoch):
