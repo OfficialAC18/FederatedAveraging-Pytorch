@@ -5,7 +5,7 @@ def create_avg_state_dict(device,state_dict):
     """
     Creates a newly initialized state-dict which will be used to compute run averages
 
-    :parans
+    :params
     device -> Device which is used to train the models
     state_dict -> The state-dict which is to be imitated (i.e The global state-dict)
 

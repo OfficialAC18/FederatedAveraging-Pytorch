@@ -4,7 +4,7 @@ import math
 from torch.optim import lr_scheduler
 from utils.abs_loss_diff import AbsLossDiff
 from torch.utils.data import DataLoader, Sampler
-from torch.nn import NLLLoss
+from torch.nn import CrossEntropyLoss
 
 def model_update(args,global_state_dict, dataset):
     """
@@ -22,9 +22,13 @@ def model_update(args,global_state_dict, dataset):
 
     local_model = create_model(args=args)
     local_model.load_state_dict(global_state_dict)
-    loss_diff = AbsLossDiff()
-    loss_fn = NLLLoss()
+    local_model.to(args.device)
 
+    loss_diff = AbsLossDiff()
+    loss_fn = CrossEntropyLoss()
+
+    # The batch size must be smaller than the dataset
+    assert args.batch_size_frac <= 1, f"The batch size is greater than the number of elements, please fix the value for batch size fraction."
     # The ceil should ensure a batch size of atleast 1
     batch_size = math.ceil(args.batch_size_frac*args.num_elements)
     
@@ -35,11 +39,12 @@ def model_update(args,global_state_dict, dataset):
         shuffle=True
     )
 
+    #Choice of Optimizer
     if args.optim == "Adam":
         optimizer = torch.optim.Adam(
             params=local_model.parameters(),
             lr = args.lr,
-            fused=True
+            fused=True if args.gpu else False
         )
     elif args.optim == "SGD":
         optimizer = torch.optim.SGD(
@@ -53,9 +58,10 @@ def model_update(args,global_state_dict, dataset):
         optimizer = torch.optim.AdamW(
             params=local_model.parameters(),
             lr = args.lr,
-            fused=True
+            fused=True if args.gpu else False
         )
 
+    #Choice of Scheduler
     if args.sched == "cyclic":
         scheduler = lr_scheduler.CyclicLR(
             optimizer=optimizer,
@@ -67,6 +73,7 @@ def model_update(args,global_state_dict, dataset):
             optimizer=optimizer,
             max_lr=args.lr * 10,
             epochs=args.client_epochs,
+            steps_per_epoch=len(train_dl)
         )
     elif args.sched == "cosine":
         scheduler = lr_scheduler.CosineAnnealingLR(
@@ -84,9 +91,10 @@ def model_update(args,global_state_dict, dataset):
     local_model.train()
     for epoch in range(args.client_epochs):
         for x,y in train_dl:
-            optimizer.zero_grad()
-            output = local_model(x)
-            loss
+            x,y = x.to(args.device), y.to(args.device)
+            # optimizer.zero_grad()
+            # output = local_model(x)
+            # loss = loss_fn()
 
 
 

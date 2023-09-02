@@ -61,6 +61,7 @@ def train_options():
                         default = "1cycle",
                         help="Keep the learning rate static or use a Scheduler (static, cyclic, 1cycle, cosine, step)"
                         )
+    
     parser.add_argument('--optim',
                         choices=["Adam",'SGD','AdamW'],
                         default="Adam",
@@ -94,6 +95,7 @@ def train_options():
                         type=int,
                         default=4,
                         help="The number of threads to collate the dataloader")
+    
     args = parser.parse_args()
     return args
 

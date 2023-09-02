@@ -28,6 +28,7 @@ class CNN(nn.Module):
         else:    
             self.head = nn.Linear(in_features=512, out_features=100) 
 
+
     
     
     def forward(self, x):
