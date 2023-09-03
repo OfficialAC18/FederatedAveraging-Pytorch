@@ -78,7 +78,7 @@ def model_update(args,global_state_dict, dataset):
     elif args.sched == "cosine":
         scheduler = lr_scheduler.CosineAnnealingLR(
             optimizer=optimizer,
-            T_max=len(dataset)//batch_size
+            T_max=batch_size
         )
     elif args.sched == "step":
         scheduler = lr_scheduler.StepLR(
@@ -92,10 +92,18 @@ def model_update(args,global_state_dict, dataset):
     for epoch in range(args.client_epochs):
         for x,y in train_dl:
             x,y = x.to(args.device), y.to(args.device)
-            # optimizer.zero_grad()
-            # output = local_model(x)
-            # loss = loss_fn()
+            optimizer.zero_grad()
+            output = local_model(x)
 
+            loss = loss_fn(output, y, reduction='mean')
+            loss.backward()
 
+            optimizer.step()
+
+            if args.sched != "step":
+                scheduler.step()
+
+        if args.sched == "step":
+            scheduler.step()
 
     return  local_model.state_dict()
