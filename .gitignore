@@ -2,5 +2,5 @@ data/
 utils/.ipynb_checkpoints/
 utils/data_processing.ipynb
 
-!__init__.py
-!dataset.py
+!data/__init__.py
+!data/dataset.py
